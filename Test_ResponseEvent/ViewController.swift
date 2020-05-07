@@ -82,6 +82,7 @@ extension ViewController {
                 if self.currentActivity != nil {
                     
                     let semaphoreWait = self.semaphore.wait(timeout: DispatchTime.now() + 0.033334)
+//                    let semaphoreWait = self.semaphore.wait(timeout: DispatchTime.now() + 1)
                     
                     if semaphoreWait == .timedOut {
                         
@@ -115,7 +116,6 @@ extension ViewController {
         CFRunLoopRemoveObserver(CFRunLoopGetCurrent(), runLoopObserver, CFRunLoopMode.commonModes)
 
     }
-
     
 }
 

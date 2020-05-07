@@ -195,7 +195,7 @@ public class ToolClass: NSObject {
             return 0
         }
         
-        var timeArray = timeStr.replacingOccurrences(of: "：", with: ":").components(separatedBy: ":")
+        let timeArray = timeStr.replacingOccurrences(of: "：", with: ":").components(separatedBy: ":")
         var seconds: Double = 0
         
         switch timeArray.count {
