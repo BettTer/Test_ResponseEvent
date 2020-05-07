@@ -13,6 +13,9 @@
 		7F21CD3224552BBB000DB8E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F21CD3124552BBB000DB8E5 /* Assets.xcassets */; };
 		7F21CD3524552BBB000DB8E5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7F21CD3324552BBB000DB8E5 /* LaunchScreen.storyboard */; };
 		7F771F8424628F2200B8ABD1 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F771F8324628F2200B8ABD1 /* TestView.swift */; };
+		7F771F862463A8BC00B8ABD1 /* BaseExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F771F852463A8BC00B8ABD1 /* BaseExtensions.swift */; };
+		7F771F892463A92800B8ABD1 /* ToolClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F771F882463A92800B8ABD1 /* ToolClass.swift */; };
+		7F771F8B2463A94000B8ABD1 /* EnumSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F771F8A2463A94000B8ABD1 /* EnumSet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +27,9 @@
 		7F21CD3424552BBB000DB8E5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7F21CD3624552BBB000DB8E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7F771F8324628F2200B8ABD1 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
+		7F771F852463A8BC00B8ABD1 /* BaseExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseExtensions.swift; sourceTree = "<group>"; };
+		7F771F882463A92800B8ABD1 /* ToolClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolClass.swift; sourceTree = "<group>"; };
+		7F771F8A2463A94000B8ABD1 /* EnumSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnumSet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +62,7 @@
 		7F21CD2724552BB7000DB8E5 /* Test_ResponseEvent */ = {
 			isa = PBXGroup;
 			children = (
+				7F771F872463A8E100B8ABD1 /* BasicTools */,
 				7F21CD2824552BB7000DB8E5 /* AppDelegate.swift */,
 				7F21CD2C24552BB7000DB8E5 /* ViewController.swift */,
 				7F771F8324628F2200B8ABD1 /* TestView.swift */,
@@ -65,6 +72,16 @@
 				7F21CD3624552BBB000DB8E5 /* Info.plist */,
 			);
 			path = Test_ResponseEvent;
+			sourceTree = "<group>";
+		};
+		7F771F872463A8E100B8ABD1 /* BasicTools */ = {
+			isa = PBXGroup;
+			children = (
+				7F771F8A2463A94000B8ABD1 /* EnumSet.swift */,
+				7F771F882463A92800B8ABD1 /* ToolClass.swift */,
+				7F771F852463A8BC00B8ABD1 /* BaseExtensions.swift */,
+			);
+			path = BasicTools;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,7 +157,10 @@
 			files = (
 				7F771F8424628F2200B8ABD1 /* TestView.swift in Sources */,
 				7F21CD2D24552BB7000DB8E5 /* ViewController.swift in Sources */,
+				7F771F862463A8BC00B8ABD1 /* BaseExtensions.swift in Sources */,
+				7F771F8B2463A94000B8ABD1 /* EnumSet.swift in Sources */,
 				7F21CD2924552BB7000DB8E5 /* AppDelegate.swift in Sources */,
+				7F771F892463A92800B8ABD1 /* ToolClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
