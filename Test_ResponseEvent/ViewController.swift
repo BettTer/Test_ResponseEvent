@@ -8,31 +8,60 @@
 
 import UIKit
 import CoreFoundation
+import YYText
 
 class ViewController: UIViewController {
     @IBOutlet weak var button: UIButton!
+    
+    @IBOutlet var views: [UIView]!
     
     var currentActivity: CFRunLoopActivity?
     let semaphore = DispatchSemaphore.init(value: 0)
     var runLoopObserver: CFRunLoopObserver?
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.decideRunningSlow()
+        self.setupUI()
+        
+    }
+    
+    deinit {
+        self.removeRunLoopObserver()
+        MainManagar.shared.removeDelegate(owner: self)
+    }
+    
+}
+
+// MARK: - UI ==============================
+extension ViewController {
+    func setupUI() -> Void {
         button.addTarget(self, action: #selector(self.clickEvent1), for: .touchUpOutside)
         
         let tapRecognizer = UITapGestureRecognizer.init(target: self, action: #selector(self.clickEvent2))
         button.addGestureRecognizer(tapRecognizer)
         
+        MainManagar.shared.addDelegate(self, owner: self)
+    }
+    
+}
+
+// MARK: - 代理: ColorDelegate ==============================
+extension ViewController: ColorDelegate {
+    func setTargetColorWith(_ color: UIColor) {
+        for view in views {
+            view.backgroundColor = color
+            
+        }
         
-        self.decideRunningSlow()
     }
     
-    deinit {
-        self.removeRunLoopObserver()
-    }
-    
+}
+
+
+// MARK: - 响应事件 ==============================
+extension ViewController {
     @objc func clickEvent1() -> Void {
         print("clickEvent1")
         
@@ -42,9 +71,10 @@ class ViewController: UIViewController {
         print("clickEvent2")
         
     }
-
+    
 }
 
+// MARK: - 检测卡顿 ==============================
 extension ViewController {
     
     /// Runloop检测卡顿
@@ -92,7 +122,7 @@ extension ViewController {
                             break
                             
                         default:
-                            print("正常")
+//                            print("正常")
                             break
                             
                         }

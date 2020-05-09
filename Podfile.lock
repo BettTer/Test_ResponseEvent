@@ -1,0 +1,31 @@
+PODS:
+  - ChameleonFramework/Default (2.1.0)
+  - ChameleonFramework/Swift (2.1.0):
+    - ChameleonFramework/Default
+  - YYText (1.0.7)
+
+DEPENDENCIES:
+  - ChameleonFramework/Swift (from `https://github.com/wowansm/Chameleon.git`, branch `swift5`)
+  - YYText
+
+SPEC REPOS:
+  https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git:
+    - YYText
+
+EXTERNAL SOURCES:
+  ChameleonFramework:
+    :branch: swift5
+    :git: https://github.com/wowansm/Chameleon.git
+
+CHECKOUT OPTIONS:
+  ChameleonFramework:
+    :commit: 96d52c36a45847fff60bcff7a58fec1e4bd7390b
+    :git: https://github.com/wowansm/Chameleon.git
+
+SPEC CHECKSUMS:
+  ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
+  YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
+
+PODFILE CHECKSUM: e9deadd406bf8c9e365ceb23077dc5e5c77ba7f7
+
+COCOAPODS: 1.8.4
