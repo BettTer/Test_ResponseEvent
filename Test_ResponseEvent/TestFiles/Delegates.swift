@@ -39,8 +39,16 @@ class MainManagar: NSObject {
     }
     
     func removeDelegate(owner: NSObject) {
-        self.itemDelegateMaptable.removeObject(forKey: owner)
+        /// 列举者
+        let enumerator = itemDelegateMaptable.keyEnumerator()
         
+        let hasOwner = enumerator.allObjects.contains { $0 as! NSObject == owner }
+        
+        if hasOwner {
+            self.itemDelegateMaptable.removeObject(forKey: owner)
+            
+        }
+
     }
     
 }
