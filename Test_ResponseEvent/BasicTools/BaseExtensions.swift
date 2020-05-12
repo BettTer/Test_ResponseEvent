@@ -186,26 +186,19 @@ extension UIView {
             self.setBorder(byRoundingPath: borderPath, color: borderColor!, width: borderWidth! * 2)
             
             if needCorners {
-                let insideFrame = CGRect.init(
-                x: self.bounds.origin.x + borderWidth!,
-                y: self.bounds.origin.y + borderWidth!,
-                width: self.bounds.width - borderWidth! * 2,
-                height: self.bounds.height - borderWidth! * 2)
+                let borderPathCornerRadii = (self.bounds.height - borderWidth! * 2) * radii! / self.bounds.height
                 
-                let borderPathCornerRadii = insideFrame.height * radii! / self.bounds.height
+                let insideFrame = CGRect.init(
+                    x: self.bounds.origin.x + borderWidth! / 2,
+                    y: self.bounds.origin.y + borderWidth! / 2,
+                    width: self.bounds.width - borderWidth!,
+                    height: self.bounds.height - borderWidth!)
                 
                 let insideCornersPath = UIBezierPath.init(roundedRect: insideFrame, byRoundingCorners: corners!, cornerRadii: CGSize(width: borderPathCornerRadii, height: borderPathCornerRadii))
                 
-                self.setBorder(byRoundingPath: insideCornersPath, color: borderColor!, width: borderPathCornerRadii)
+                self.setBorder(byRoundingPath: insideCornersPath, color: borderColor!, width: borderWidth!)
                 
             }
-            
-            
-
-            //                borderPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: corners!, cornerRadii: CGSize(width: borderPathCornerRadii, height: borderPathCornerRadii))
-            //
-            //            }else {
-            //                borderPath = UIBezierPath.init(rect: self.bounds)
             
         }
         

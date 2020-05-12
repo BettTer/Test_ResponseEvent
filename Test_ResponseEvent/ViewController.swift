@@ -34,9 +34,9 @@ class ViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.views[0].setCornerAndBorder(byRoundingCorners: .bottomRight, radii: 95, borderColor: .black, borderWidth: 25)
+        self.views[0].setCornerAndBorder(byRoundingCorners: .allCorners, radii: 95, borderColor: .black, borderWidth: 25)
         self.views[1].setCornerAndBorder(byRoundingCorners: nil, radii: nil, borderColor: .black, borderWidth: 25)
-        self.views[2].setCornerAndBorder(byRoundingCorners: .bottomRight, radii: 95, borderColor: nil, borderWidth: nil)
+        self.views[2].setCornerAndBorder(byRoundingCorners: .allCorners, radii: 95, borderColor: nil, borderWidth: nil)
         
     }
     
