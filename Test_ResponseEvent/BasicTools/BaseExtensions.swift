@@ -24,7 +24,7 @@ extension NSObject{
 extension UIViewController {
     /// 获取当前控制器头部高度
     public func getStatusBarAndNaviBarHeight() -> CGFloat {
-        return UIApplication.shared.statusBarFrame.size.height + self.navigationController!.navigationBar.getHeight()
+        return UIApplication.shared.statusBarFrame.size.height + self.navigationController!.navigationBar.height()
         
     }// funcEnd
     
@@ -100,22 +100,22 @@ extension UIAlertController {
 extension UIView {
     
     /// 获取当前View的横坐标
-    public func getX() -> CGFloat {
+    public func x() -> CGFloat {
         return self.frame.origin.x
     }
     
     /// 获取当前View的纵坐标
-    public func getY() -> CGFloat {
+    public func y() -> CGFloat {
         return self.frame.origin.y
     }
     
     /// 获取当前View的宽
-    public func getWidth() -> CGFloat {
+    public func width() -> CGFloat {
         return self.frame.width
     }
     
     /// 获取当前View的高
-    public func getHeight() -> CGFloat {
+    public func height() -> CGFloat {
         return self.frame.height
     }
     
@@ -143,194 +143,79 @@ extension UIView {
         return image!
     }
     
-    /// 可选部位圆角 corners: 需要实现为圆角的角，可传入多个 radii: 圆角半径
-    public func optionalCorner(byRoundingCorners corners: UIRectCorner, radii: CGFloat) -> Void {
-        let maskPath = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radii, height: radii))
-        let maskLayer = CAShapeLayer()
-        maskLayer.frame = self.bounds
+    
+    /// 设置可选圆角与边框(外)
+    /// - Parameters:
+    ///   - corners: 需要圆角的部位
+    ///   - radii: 圆角大小
+    ///   - borderColor: 边框颜色
+    ///   - borderWidth: 边框宽度
+    /// - Returns: Void
+    public func setCornerAndBorder(
+        byRoundingCorners corners: UIRectCorner?,
+        radii: CGFloat?,
+        borderColor: UIColor?,
+        borderWidth: CGFloat?) -> Void {
+        
+        let needCorners: Bool = (corners != nil)
+        let needBorder: Bool = (borderColor != nil)
+        
+        if needCorners == false && needBorder == false  {
+            return
+            
+        }
+        
+        /// 遮罩线
+        var maskPath: UIBezierPath
+        
+        if needCorners {
+            maskPath = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corners!, cornerRadii: CGSize(width: radii!, height: radii!))
+            
+        }else {
+            maskPath = UIBezierPath(rect: self.bounds)
+            
+        }
+        
+        let maskLayer = CAShapeLayer.init()
         maskLayer.path = maskPath.cgPath
         self.layer.mask = maskLayer
         
-    }
-    
-    
-    public enum ViewSide {
-        /// 上边
-        case top
-        /// 下边
-        case bottom
-        /// 左边
-        case left
-        /// 右边
-        case right
-    }
-    /// 可选部位边框
-    public func optionalBorder(sideArray: [ViewSide], thickness: CGFloat, color: UIColor, leftOffset: CGFloat = 0, rightOffset: CGFloat = 0, topOffset: CGFloat = 0, bottomOffset: CGFloat = 0) -> Void {
-        
-        for side in sideArray {
-            var border: CALayer
+        if needBorder {
+            /// 边框线
+            var borderPath: UIBezierPath
             
-            switch side {
-            case .top:
-                // Bottom Offset Has No Effect
-                // Subtract the bottomOffset from the height and the thickness to get our final y position.
-                // Add a left offset to our x to get our x position.
-                // Minus our rightOffset and negate the leftOffset from the width to get our endpoint for the border.
-                border =  _getOneSidedBorder(frame: CGRect(x: 0 + leftOffset,
-                                                           y: 0 + topOffset,
-                                                           width: self.frame.size.width - leftOffset - rightOffset,
-                                                           height: thickness), color: color)
-            case .right:
-                // Left Has No Effect
-                // Subtract bottomOffset from the height to get our end.
-                border = _getOneSidedBorder(frame: CGRect(x: self.frame.size.width - thickness - rightOffset,
-                                                          y: 0 + topOffset,
-                                                          width: thickness,
-                                                          height: self.frame.size.height), color: color)
-            case .bottom:
-                // Top has No Effect
-                // Subtract the bottomOffset from the height and the thickness to get our final y position.
-                // Add a left offset to our x to get our x position.
-                // Minus our rightOffset and negate the leftOffset from the width to get our endpoint for the border.
-                border = _getOneSidedBorder(frame: CGRect(x: 0 + leftOffset,
-                                                          y: self.frame.size.height-thickness-bottomOffset,
-                                                          width: self.frame.size.width - leftOffset - rightOffset,
-                                                          height: thickness), color: color)
-            case .left:
-                // Right Has No Effect
-                border = _getOneSidedBorder(frame: CGRect(x: 0 + leftOffset,
-                                                          y: 0 + topOffset,
-                                                          width: thickness,
-                                                          height: self.frame.size.height - topOffset - bottomOffset), color: color)
+            if needCorners {
+                let borderPathCornerRadii = (self.bounds.height - borderWidth! * 2) * radii! / self.bounds.height
+                borderPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: corners!, cornerRadii: CGSize(width: borderPathCornerRadii, height: borderPathCornerRadii))
+                
+            }else {
+                borderPath = UIBezierPath.init(rect: self.bounds)
+                
             }
             
-            self.layer.addSublayer(border)
+            self.setBorder(byRoundingPath: borderPath, color: borderColor!, width: borderWidth! * 2)
         }
+        
         
     }
     
-    public func createViewBackedBorder(side: ViewSide, thickness: CGFloat, color: UIColor, leftOffset: CGFloat = 0, rightOffset: CGFloat = 0, topOffset: CGFloat = 0, bottomOffset: CGFloat = 0) -> UIView {
+    /// 添加边框
+    private func setBorder(
+        byRoundingPath path: UIBezierPath,
+        color: UIColor,
+        width: CGFloat) -> Void {
+                
+        /// 边框Layer
+        let borderShapeLayer = CAShapeLayer.init()
+        borderShapeLayer.path = path.cgPath
+        borderShapeLayer.strokeColor = color.cgColor
+        borderShapeLayer.fillColor = UIColor.clear.cgColor
+        borderShapeLayer.lineWidth = width
         
-        switch side {
-        case .top:
-            let border: UIView = _getViewBackedOneSidedBorder(frame: CGRect(x: 0 + leftOffset,
-                                                                            y: 0 + topOffset,
-                                                                            width: self.frame.size.width - leftOffset - rightOffset,
-                                                                            height: thickness), color: color)
-            border.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
-            return border
-            
-        case .right:
-            let border: UIView = _getViewBackedOneSidedBorder(frame: CGRect(x: self.frame.size.width-thickness-rightOffset,
-                                                                            y: 0 + topOffset, width: thickness,
-                                                                            height: self.frame.size.height - topOffset - bottomOffset), color: color)
-            border.autoresizingMask = [.flexibleHeight, .flexibleLeftMargin]
-            return border
-            
-        case .bottom:
-            let border: UIView = _getViewBackedOneSidedBorder(frame: CGRect(x: 0 + leftOffset,
-                                                                            y: self.frame.size.height-thickness-bottomOffset,
-                                                                            width: self.frame.size.width - leftOffset - rightOffset,
-                                                                            height: thickness), color: color)
-            border.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-            return border
-            
-        case .left:
-            let border: UIView = _getViewBackedOneSidedBorder(frame: CGRect(x: 0 + leftOffset,
-                                                                            y: 0 + topOffset,
-                                                                            width: thickness,
-                                                                            height: self.frame.size.height - topOffset - bottomOffset), color: color)
-            border.autoresizingMask = [.flexibleHeight, .flexibleRightMargin]
-            return border
-        }
-    }
-    
-    public func addBorder(side: ViewSide, thickness: CGFloat, color: UIColor, leftOffset: CGFloat = 0, rightOffset: CGFloat = 0, topOffset: CGFloat = 0, bottomOffset: CGFloat = 0) {
-        
-        switch side {
-        case .top:
-            // Add leftOffset to our X to get start X position.
-            // Add topOffset to Y to get start Y position
-            // Subtract left offset from width to negate shifting from leftOffset.
-            // Subtract rightoffset from width to set end X and Width.
-            let border: CALayer = _getOneSidedBorder(frame: CGRect(x: 0 + leftOffset,
-                                                                   y: 0 + topOffset,
-                                                                   width: self.frame.size.width - leftOffset - rightOffset,
-                                                                   height: thickness), color: color)
-            self.layer.addSublayer(border)
-        case .right:
-            // Subtract the rightOffset from our width + thickness to get our final x position.
-            // Add topOffset to our y to get our start y position.
-            // Subtract topOffset from our height, so our border doesn't extend past teh view.
-            // Subtract bottomOffset from the height to get our end.
-            let border: CALayer = _getOneSidedBorder(frame: CGRect(x: self.frame.size.width-thickness-rightOffset,
-                                                                   y: 0 + topOffset, width: thickness,
-                                                                   height: self.frame.size.height - topOffset - bottomOffset), color: color)
-            self.layer.addSublayer(border)
-        case .bottom:
-            // Subtract the bottomOffset from the height and the thickness to get our final y position.
-            // Add a left offset to our x to get our x position.
-            // Minus our rightOffset and negate the leftOffset from the width to get our endpoint for the border.
-            let border: CALayer = _getOneSidedBorder(frame: CGRect(x: 0 + leftOffset,
-                                                                   y: self.frame.size.height-thickness-bottomOffset,
-                                                                   width: self.frame.size.width - leftOffset - rightOffset, height: thickness), color: color)
-            self.layer.addSublayer(border)
-        case .left:
-            let border: CALayer = _getOneSidedBorder(frame: CGRect(x: 0 + leftOffset,
-                                                                   y: 0 + topOffset,
-                                                                   width: thickness,
-                                                                   height: self.frame.size.height - topOffset - bottomOffset), color: color)
-            self.layer.addSublayer(border)
-        }
-    }
-    
-    public func addViewBackedBorder(side: ViewSide, thickness: CGFloat, color: UIColor, leftOffset: CGFloat = 0, rightOffset: CGFloat = 0, topOffset: CGFloat = 0, bottomOffset: CGFloat = 0) {
-        switch side {
-        case .top:
-            let border: UIView = _getViewBackedOneSidedBorder(frame: CGRect(x: 0 + leftOffset,
-                                                                            y: 0 + topOffset,
-                                                                            width: self.frame.size.width - leftOffset - rightOffset,
-                                                                            height: thickness), color: color)
-            border.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
-            self.addSubview(border)
-            
-        case .right:
-            let border: UIView = _getViewBackedOneSidedBorder(frame: CGRect(x: self.frame.size.width-thickness-rightOffset,
-                                                                            y: 0 + topOffset, width: thickness,
-                                                                            height: self.frame.size.height - topOffset - bottomOffset), color: color)
-            border.autoresizingMask = [.flexibleHeight, .flexibleLeftMargin]
-            self.addSubview(border)
-            
-        case .bottom:
-            let border: UIView = _getViewBackedOneSidedBorder(frame: CGRect(x: 0 + leftOffset,
-                                                                            y: self.frame.size.height-thickness-bottomOffset,
-                                                                            width: self.frame.size.width - leftOffset - rightOffset,
-                                                                            height: thickness), color: color)
-            border.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-            self.addSubview(border)
-        case .left:
-            let border: UIView = _getViewBackedOneSidedBorder(frame: CGRect(x: 0 + leftOffset,
-                                                                            y: 0 + topOffset,
-                                                                            width: thickness,
-                                                                            height: self.frame.size.height - topOffset - bottomOffset), color: color)
-            border.autoresizingMask = [.flexibleHeight, .flexibleRightMargin]
-            self.addSubview(border)
-        }
+        self.layer.addSublayer(borderShapeLayer)
         
     }
     
-    fileprivate func _getOneSidedBorder(frame: CGRect, color: UIColor) -> CALayer {
-        let border:CALayer = CALayer()
-        border.frame = frame
-        border.backgroundColor = color.cgColor
-        return border
-    }
-    
-    fileprivate func _getViewBackedOneSidedBorder(frame: CGRect, color: UIColor) -> UIView {
-        let border:UIView = UIView.init(frame: frame)
-        border.backgroundColor = color
-        return border
-    }
     
     /// 添加阴影
     private func dropShadow(color: UIColor, opacity: Float = 0.5, offSet: CGSize, radius: CGFloat = 1, scale: Bool = true) {
@@ -441,8 +326,8 @@ extension UILabel {
 extension UITextField {
     /// 设置UITextField为动态宽
     public func setAutoFitWidth() -> CGFloat {
-        let autoSize: CGSize = self.sizeThatFits(CGSize.init(width: CGFloat(MAXFLOAT), height: self.getHeight()))
-        self.frame = CGRect.init(x: self.getX(), y: self.getY(), width: autoSize.width, height: self.getHeight())
+        let autoSize: CGSize = self.sizeThatFits(CGSize.init(width: CGFloat(MAXFLOAT), height: self.height()))
+        self.frame = CGRect.init(x: self.x(), y: self.y(), width: autoSize.width, height: self.height())
         return autoSize.width
     }
     
