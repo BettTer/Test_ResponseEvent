@@ -181,9 +181,6 @@ extension UIView {
         self.layer.mask = maskLayer
         
         if needBorder {
-            /// 边框线
-            let borderPath = UIBezierPath.init(rect: self.bounds)
-            self.setBorder(byRoundingPath: borderPath, color: borderColor!, width: borderWidth! * 2)
             
             if needCorners {
                 let borderPathCornerRadii = (self.bounds.height - borderWidth! * 2) * radii! / self.bounds.height
@@ -197,6 +194,11 @@ extension UIView {
                 let insideCornersPath = UIBezierPath.init(roundedRect: insideFrame, byRoundingCorners: corners!, cornerRadii: CGSize(width: borderPathCornerRadii, height: borderPathCornerRadii))
                 
                 self.setBorder(byRoundingPath: insideCornersPath, color: borderColor!, width: borderWidth!)
+                
+            }else {
+                /// 边框线
+                let borderPath = UIBezierPath.init(rect: self.bounds)
+                self.setBorder(byRoundingPath: borderPath, color: borderColor!, width: borderWidth! * 2)
                 
             }
             
