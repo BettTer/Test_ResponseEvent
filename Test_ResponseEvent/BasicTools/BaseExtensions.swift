@@ -182,18 +182,31 @@ extension UIView {
         
         if needBorder {
             /// 边框线
-            var borderPath: UIBezierPath
+            let borderPath = UIBezierPath.init(rect: self.bounds)
+            self.setBorder(byRoundingPath: borderPath, color: borderColor!, width: borderWidth! * 2)
             
             if needCorners {
-                let borderPathCornerRadii = (self.bounds.height - borderWidth! * 2) * radii! / self.bounds.height
-                borderPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: corners!, cornerRadii: CGSize(width: borderPathCornerRadii, height: borderPathCornerRadii))
+                let insideFrame = CGRect.init(
+                x: self.bounds.origin.x + borderWidth!,
+                y: self.bounds.origin.y + borderWidth!,
+                width: self.bounds.width - borderWidth! * 2,
+                height: self.bounds.height - borderWidth! * 2)
                 
-            }else {
-                borderPath = UIBezierPath.init(rect: self.bounds)
+                let borderPathCornerRadii = insideFrame.height * radii! / self.bounds.height
+                
+                let insideCornersPath = UIBezierPath.init(roundedRect: insideFrame, byRoundingCorners: corners!, cornerRadii: CGSize(width: borderPathCornerRadii, height: borderPathCornerRadii))
+                
+                self.setBorder(byRoundingPath: insideCornersPath, color: borderColor!, width: borderPathCornerRadii)
                 
             }
             
-            self.setBorder(byRoundingPath: borderPath, color: borderColor!, width: borderWidth! * 2)
+            
+
+            //                borderPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: corners!, cornerRadii: CGSize(width: borderPathCornerRadii, height: borderPathCornerRadii))
+            //
+            //            }else {
+            //                borderPath = UIBezierPath.init(rect: self.bounds)
+            
         }
         
         
