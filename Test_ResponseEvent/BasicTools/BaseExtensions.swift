@@ -147,7 +147,7 @@ extension UIView {
     /// 设置可选圆角与边框(外)
     /// - Parameters:
     ///   - corners: 需要圆角的部位
-    ///   - radii: 圆角大小
+    ///   - radii: 圆角半径(⚠️: 大于高的一半时会失效)
     ///   - borderColor: 边框颜色
     ///   - borderWidth: 边框宽度
     /// - Returns: Void
@@ -182,23 +182,47 @@ extension UIView {
         
         if needBorder {
             
+            /// 边框线
+            let borderPath = UIBezierPath.init(rect: self.bounds)
+            self.setBorder(byRoundingPath: borderPath, color: borderColor!, width: borderWidth! * 2)
+            
             if needCorners {
-                let borderPathCornerRadii = (self.bounds.height - borderWidth!) * radii! / self.bounds.height
                 
-                let insideFrame = CGRect.init(
-                    x: self.bounds.origin.x + borderWidth! / 2,
-                    y: self.bounds.origin.y + borderWidth! / 2,
-                    width: self.bounds.width - borderWidth!,
-                    height: self.bounds.height - borderWidth!)
+                if corners!.contains(.bottomRight) {
+                    let arcCenter = CGPoint.init(
+                        x: self.bounds.width - radii!,
+                        y: self.bounds.height - radii!)
+                    let bottomRightCornerPath = UIBezierPath.init(arcCenter: arcCenter, radius: radii!, startAngle: 0, endAngle: CGFloat.pi / 2, clockwise: true)
+                    self.setBorder(byRoundingPath: bottomRightCornerPath, color: borderColor!, width: borderWidth! * 2)
+                }
                 
-                let insideCornersPath = UIBezierPath.init(roundedRect: insideFrame, byRoundingCorners: corners!, cornerRadii: CGSize(width: borderPathCornerRadii, height: borderPathCornerRadii))
+                if corners!.contains(.bottomLeft) {
+                    let arcCenter = CGPoint.init(
+                        x: radii!,
+                        y: self.bounds.height - radii!)
+                    let bottomRightCornerPath = UIBezierPath.init(arcCenter: arcCenter, radius: radii!, startAngle: CGFloat.pi / 2, endAngle: CGFloat.pi, clockwise: true)
+                    self.setBorder(byRoundingPath: bottomRightCornerPath, color: borderColor!, width: borderWidth! * 2)
+                }
+
+                if corners!.contains(.topLeft) {
+                    let arcCenter = CGPoint.init(
+                        x: radii!,
+                        y: radii!)
+                    let bottomRightCornerPath = UIBezierPath.init(arcCenter: arcCenter, radius: radii!, startAngle: CGFloat.pi, endAngle: CGFloat.pi * 3 / 2, clockwise: true)
+                    self.setBorder(byRoundingPath: bottomRightCornerPath, color: borderColor!, width: borderWidth! * 2)
+
+
+                }
+
+                if corners!.contains(.topRight) {
+                    let arcCenter = CGPoint.init(
+                        x: self.bounds.width - radii!,
+                        y: radii!)
+                    let bottomRightCornerPath = UIBezierPath.init(arcCenter: arcCenter, radius: radii!, startAngle: CGFloat.pi * 3 / 2, endAngle: 0, clockwise: true)
+                    self.setBorder(byRoundingPath: bottomRightCornerPath, color: borderColor!, width: borderWidth! * 2)
+                }
                 
-                self.setBorder(byRoundingPath: insideCornersPath, color: borderColor!, width: borderWidth!)
-                
-            }else {
-                /// 边框线
-                let borderPath = UIBezierPath.init(rect: self.bounds)
-                self.setBorder(byRoundingPath: borderPath, color: borderColor!, width: borderWidth! * 2)
+
                 
             }
             
@@ -216,6 +240,7 @@ extension UIView {
         /// 边框Layer
         let borderShapeLayer = CAShapeLayer.init()
         borderShapeLayer.path = path.cgPath
+        
         borderShapeLayer.strokeColor = color.cgColor
         borderShapeLayer.fillColor = UIColor.clear.cgColor
         borderShapeLayer.lineWidth = width
