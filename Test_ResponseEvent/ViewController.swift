@@ -25,18 +25,15 @@ class ViewController: UIViewController {
         self.decideRunningSlow()
         self.setupUI()
         
-//        self.views[0].setCornerAndBorder(byRoundingCorners: [.topLeft, .bottomRight], radii: 5, borderColor: .black, borderWidth: 10)
-//        self.views[1].setCornerAndBorder(byRoundingCorners: nil, radii: nil, borderColor: .black, borderWidth: 10)
-//        self.views[2].setCornerAndBorder(byRoundingCorners: [.topLeft, .bottomRight], radii: 5, borderColor: nil, borderWidth: nil)
-        
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+//        [.topLeft, .bottomRight]
         self.views[0].setCornerAndBorder(byRoundingCorners: .allCorners, radii: 95, borderColor: .black, borderWidth: 25)
         self.views[1].setCornerAndBorder(byRoundingCorners: nil, radii: nil, borderColor: .black, borderWidth: 25)
-        self.views[2].setCornerAndBorder(byRoundingCorners: .allCorners, radii: 95, borderColor: nil, borderWidth: nil)
+        self.views[2].setCornerAndBorder(byRoundingCorners: [.topLeft, .bottomRight], radii: 95, borderColor: nil, borderWidth: nil)
         
     }
     

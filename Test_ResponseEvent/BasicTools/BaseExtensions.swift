@@ -183,7 +183,7 @@ extension UIView {
         if needBorder {
             
             if needCorners {
-                let borderPathCornerRadii = (self.bounds.height - borderWidth! * 2) * radii! / self.bounds.height
+                let borderPathCornerRadii = (self.bounds.height - borderWidth!) * radii! / self.bounds.height
                 
                 let insideFrame = CGRect.init(
                     x: self.bounds.origin.x + borderWidth! / 2,
