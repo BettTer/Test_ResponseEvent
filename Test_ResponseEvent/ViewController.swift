@@ -25,6 +25,8 @@ class ViewController: UIViewController {
         self.decideRunningSlow()
         self.setupUI()
         
+        ListNode.testRun()
+        
     }
     
     override func viewDidLayoutSubviews() {
