@@ -49,7 +49,7 @@ extension TreeNode {
         
         var result: [String] = []
         
-        while treeNodes.count != 0 || currentTreeNode {
+        while treeNodes.count != 0 || currentTreeNode != nil {
             if let node = currentTreeNode {
                 treeNodes.append(node)
                 result.append(node.title)
@@ -75,7 +75,7 @@ extension TreeNode {
         
         var result: [String] = []
         
-        while treeNodes.count != 0 || currentTreeNode {
+        while treeNodes.count != 0 || currentTreeNode != nil {
             if let node = currentTreeNode {
                 treeNodes.append(node)
                 
@@ -104,7 +104,7 @@ extension TreeNode {
         var result: [String] = []
         
         // * 先根右左
-        while treeNodes.count != 0 || currentTreeNode {
+        while treeNodes.count != 0 || currentTreeNode != nil {
             if let node = currentTreeNode {
                 treeNodes.append(node)
                 result.append(node.title)
