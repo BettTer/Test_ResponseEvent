@@ -31,7 +31,7 @@ xcuserdata
 DerivedData
 *.hmap
 *.ipa
-*.xcuserstate
+.xcuserstate
 project.xcworkspace
 
 # Android/IntelliJ
