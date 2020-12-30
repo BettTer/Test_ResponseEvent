@@ -59,10 +59,10 @@ class AboutOptimization: NSObject {
     /// UI优化
     func UI() {
         /*
-         * UI优化步骤
-         * 1. 找到CPU使用率较高的线程(thread_basic_info中的cpu_usage), 通过打印方法堆栈找到问题方法所在, 并作出针对性处理
-         * 2. 减少非必要的文件读写操作
-         * 3. 减少非必要的定位, 请求
+         * UI优化步骤 (整体思想: 平衡CPU与GPU的负载)
+         * 1. 圆角等关于layer的操作交给CPU处理(CoreGraphics)
+         * 2. UILabel替换为YYText
+         * 3. 减少离屏渲染
          */
     }
 }
