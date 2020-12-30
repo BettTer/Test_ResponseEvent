@@ -63,6 +63,8 @@ class AboutOptimization: NSObject {
          * 1. 圆角等关于layer的操作交给CPU处理(CoreGraphics)
          * 2. UILabel替换为YYText
          * 3. 减少离屏渲染
+         * 4. 异步绘制直接生成位图(实现CALayerDelegate下的display(_ layer: CALayer)并返回位图Bitmap, 即为layer.contents)
          */
+        
     }
 }
