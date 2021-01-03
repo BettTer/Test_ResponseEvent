@@ -91,3 +91,57 @@ extension AboutOptimization {
     /// 离屏渲染
     
 }
+
+extension AboutOptimization {
+    /// 三次握手_TCP
+    func threeTimesShakeHands_TCP() {
+        /*
+         * 三次握手流程:
+         * 1. 客户端向服务端发起请求链接并发送SYN报文: SYN = 1, seq = x, 且客户端进入SYN_SENT状态
+         * 2. 服务端收到请求链接后进行回复并发送响应报文: SYN = 1, seq = y, ACK = 1, ack = x + 1, 且服务端进入SYN_RCVD状态
+         * 3. 客户端收到响应报文后, 向服务端发送确认报文: ACK = 1, ack = y + 1, 且进入ESTABLISHED. 服务端收到确认报文后, 也进入ESTABLISHED状态, 链接创建成功
+         *
+         * ⚠️. 为什么需要三次握手? 为了防止已经失效的请求链接突然又传送到了服务端, 而产生错误
+         */
+        
+    }
+    
+    /// 四次挥手_TCP
+    func fourTimesWave_TCP() {
+        /*
+         * 四次挥手流程:
+         * 1. 客户端向服务端发起关闭链接的请求, 并停止发送数据
+         * 2. 服务端收到请求时向客户端回应, 并停止接收数据
+         * 3. 当服务端发送数据结束后向客户端发起关闭链接的请求, 并停止发送数据
+         * 3. 客户端收到请求时向服务端回应, 并停止接收数据
+         */
+        
+    }
+    
+    /// 完整握手流程_HTTPS
+    func handshakeProcess_TCP() {
+        /*
+         * HTTPS握手流程:
+         * 1. 客户端发送"Client Hello"报文开始SSL通信
+         * 2. 服务端收到"Client Hello"报文后, 回应"Server Hello"报文. 然后发送CA证书, 最后发送"Server Hello Done"报文(SSL第一次握手结束)
+         * 3. 客户端收到报文后通过证书获取服务端公钥, 回应"Client Key Exchange"报文(生成随机数F后加密形成密钥), 然后发送"Change Clipher Space"报文(提示服务器之后的通信都会用密钥加密), 最后发送"Finished"报文(包含至今全部报文的整体校验值)
+         * 4. 服务端收到"Finished"报文后, 同样发送"Change Clipher Space"与"Finished"报文, 逻辑同上
+         * 5. 客户端收到"Finished"报文后, SSL链接建立, 从此开始HTTP通信(内容都用密钥加密). 开始发送HTTP请求
+         * 6. 应用层收到请求后发送响应
+         * 7. 客户端断开连接
+         *
+         * ⚠️. 这是单向认证(即只验证服务端的身份), 双向验证是在单向验证的基础上再添加对客户端的验证
+         */
+        
+    }
+    
+    /// Charles抓包原理
+    func captureDataPrinciple_Charles() {
+        /*
+         * 流程:
+         * 1. 在上述第二步中拦截CA证书, 从CA证书中获取服务端公钥并制作一张假证书返回给客户端
+         * 2. 在上述第三步中拦截密钥, 并用自己的私钥解密得到随机数F, 用服务端证书的公钥加密后得到假密钥, 返回给服务端
+         */
+        
+    }
+}
