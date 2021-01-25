@@ -144,112 +144,6 @@ extension UIView {
     }
     
     
-    /// 设置可选圆角与边框(外)
-    /// - Parameters:
-    ///   - corners: 需要圆角的部位
-    ///   - radii: 圆角半径(⚠️: 大于高的一半时会失效)
-    ///   - borderColor: 边框颜色
-    ///   - borderWidth: 边框宽度
-    /// - Returns: Void
-    public func setCornerAndBorder(
-        byRoundingCorners corners: UIRectCorner?,
-        radii: CGFloat?,
-        borderColor: UIColor?,
-        borderWidth: CGFloat?) -> Void {
-        
-        let needCorners: Bool = (corners != nil)
-        let needBorder: Bool = (borderColor != nil)
-        
-        if needCorners == false && needBorder == false  {
-            return
-            
-        }
-        
-        /// 遮罩线
-        var maskPath: UIBezierPath
-        
-        if needCorners {
-            maskPath = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corners!, cornerRadii: CGSize(width: radii!, height: radii!))
-            
-        }else {
-            maskPath = UIBezierPath(rect: self.bounds)
-            
-        }
-        
-        let maskLayer = CAShapeLayer.init()
-        maskLayer.path = maskPath.cgPath
-        self.layer.mask = maskLayer
-        
-        if needBorder {
-            
-            /// 边框线
-            let borderPath = UIBezierPath.init(rect: self.bounds)
-            self.setBorder(byRoundingPath: borderPath, color: borderColor!, width: borderWidth! * 2)
-            
-            if needCorners {
-                
-                if corners!.contains(.bottomRight) {
-                    let arcCenter = CGPoint.init(
-                        x: self.bounds.width - radii!,
-                        y: self.bounds.height - radii!)
-                    let bottomRightCornerPath = UIBezierPath.init(arcCenter: arcCenter, radius: radii!, startAngle: 0, endAngle: CGFloat.pi / 2, clockwise: true)
-                    self.setBorder(byRoundingPath: bottomRightCornerPath, color: borderColor!, width: borderWidth! * 2)
-                }
-                
-                if corners!.contains(.bottomLeft) {
-                    let arcCenter = CGPoint.init(
-                        x: radii!,
-                        y: self.bounds.height - radii!)
-                    let bottomRightCornerPath = UIBezierPath.init(arcCenter: arcCenter, radius: radii!, startAngle: CGFloat.pi / 2, endAngle: CGFloat.pi, clockwise: true)
-                    self.setBorder(byRoundingPath: bottomRightCornerPath, color: borderColor!, width: borderWidth! * 2)
-                }
-
-                if corners!.contains(.topLeft) {
-                    let arcCenter = CGPoint.init(
-                        x: radii!,
-                        y: radii!)
-                    let bottomRightCornerPath = UIBezierPath.init(arcCenter: arcCenter, radius: radii!, startAngle: CGFloat.pi, endAngle: CGFloat.pi * 3 / 2, clockwise: true)
-                    self.setBorder(byRoundingPath: bottomRightCornerPath, color: borderColor!, width: borderWidth! * 2)
-
-
-                }
-
-                if corners!.contains(.topRight) {
-                    let arcCenter = CGPoint.init(
-                        x: self.bounds.width - radii!,
-                        y: radii!)
-                    let bottomRightCornerPath = UIBezierPath.init(arcCenter: arcCenter, radius: radii!, startAngle: CGFloat.pi * 3 / 2, endAngle: 0, clockwise: true)
-                    self.setBorder(byRoundingPath: bottomRightCornerPath, color: borderColor!, width: borderWidth! * 2)
-                }
-                
-
-                
-            }
-            
-        }
-        
-        
-    }
-    
-    /// 添加边框
-    private func setBorder(
-        byRoundingPath path: UIBezierPath,
-        color: UIColor,
-        width: CGFloat) -> Void {
-                
-        /// 边框Layer
-        let borderShapeLayer = CAShapeLayer.init()
-        borderShapeLayer.path = path.cgPath
-        
-        borderShapeLayer.strokeColor = color.cgColor
-        borderShapeLayer.fillColor = UIColor.clear.cgColor
-        borderShapeLayer.lineWidth = width
-        
-        self.layer.addSublayer(borderShapeLayer)
-        
-    }
-    
-    
     /// 添加阴影
     private func dropShadow(color: UIColor, opacity: Float = 0.5, offSet: CGSize, radius: CGFloat = 1, scale: Bool = true) {
         layer.masksToBounds = true
@@ -307,6 +201,156 @@ extension UIView {
     }
     
 }
+
+extension UIView {
+    static private var BorderLayersKey = "BorderLayersKey"
+    
+    private var borderLayers: [CAShapeLayer]? {
+        set {
+            objc_setAssociatedObject(self, &UIView.BorderLayersKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            
+        }
+        
+        get {
+            return objc_getAssociatedObject(self, &UIView.BorderLayersKey) as! [CAShapeLayer]?
+            
+        }
+    }
+    
+    @objc public func setOptionalCorner(size: CGSize, corners: UIRectCorner, radii: CGFloat) {
+        self.setCornerAndBorder(size: size, byRoundingCorners: corners, radii: radii)
+    }
+
+    /// 同时设置圆角与外边框,
+    /// - Parameters:
+    ///   - size: 最终大小
+    ///   - corners: 圆角的部位
+    ///   - radii: 圆角半径(⚠️: 大于高的一半时会失效)
+    ///   - borderColor: 边框颜色
+    ///   - borderWidth: 边框宽度
+    private func setCornerAndBorder(
+        size: CGSize,
+        byRoundingCorners corners: UIRectCorner?,
+        radii: CGFloat?,
+        borderColor: UIColor? = nil,
+        borderWidth: CGFloat? = nil) {
+        
+        if let maskLayer = self.layer.mask {
+            maskLayer.removeFromSuperlayer()
+            self.layer.mask = nil
+            
+        }
+        
+        
+        let needCorners: Bool = (corners != nil)
+        let needBorder: Bool = (borderColor != nil)
+        
+        if needCorners == false && needBorder == false  {
+            return
+            
+        }
+        
+        /// 遮罩线
+        var maskPath: UIBezierPath
+        let bounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        
+        if needCorners {
+            maskPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners!, cornerRadii: CGSize(width: radii!, height: radii!))
+            
+        }else {
+            maskPath = UIBezierPath(rect: bounds)
+            
+        }
+        
+        let maskLayer = CAShapeLayer.init()
+        maskLayer.path = maskPath.cgPath
+        self.layer.mask = maskLayer
+        
+        if needBorder {
+            
+            // * 如果有之前的 先清掉
+            if let _ = borderLayers {
+                for borderLayer in borderLayers! {
+                    borderLayer.removeFromSuperlayer()
+                    
+                }
+                
+                borderLayers!.removeAll()
+            }
+            
+            borderLayers = []
+            
+            /// 边框线
+            let borderPath = UIBezierPath.init(rect: bounds)
+            self.setBorder(byRoundingPath: borderPath, color: borderColor!, width: borderWidth! * 2)
+            
+            if needCorners {
+                
+                if corners!.contains(.bottomRight) {
+                    let arcCenter = CGPoint.init(
+                        x: bounds.width - radii!,
+                        y: bounds.height - radii!)
+                    let bottomRightCornerPath = UIBezierPath.init(arcCenter: arcCenter, radius: radii!, startAngle: 0, endAngle: CGFloat.pi / 2, clockwise: true)
+                    self.setBorder(byRoundingPath: bottomRightCornerPath, color: borderColor!, width: borderWidth! * 2)
+                }
+                
+                if corners!.contains(.bottomLeft) {
+                    let arcCenter = CGPoint.init(
+                        x: radii!,
+                        y: bounds.height - radii!)
+                    let bottomRightCornerPath = UIBezierPath.init(arcCenter: arcCenter, radius: radii!, startAngle: CGFloat.pi / 2, endAngle: CGFloat.pi, clockwise: true)
+                    self.setBorder(byRoundingPath: bottomRightCornerPath, color: borderColor!, width: borderWidth! * 2)
+                }
+
+                if corners!.contains(.topLeft) {
+                    let arcCenter = CGPoint.init(
+                        x: radii!,
+                        y: radii!)
+                    let bottomRightCornerPath = UIBezierPath.init(arcCenter: arcCenter, radius: radii!, startAngle: CGFloat.pi, endAngle: CGFloat.pi * 3 / 2, clockwise: true)
+                    self.setBorder(byRoundingPath: bottomRightCornerPath, color: borderColor!, width: borderWidth! * 2)
+
+
+                }
+
+                if corners!.contains(.topRight) {
+                    let arcCenter = CGPoint.init(
+                        x: bounds.width - radii!,
+                        y: radii!)
+                    let bottomRightCornerPath = UIBezierPath.init(arcCenter: arcCenter, radius: radii!, startAngle: CGFloat.pi * 3 / 2, endAngle: 0, clockwise: true)
+                    self.setBorder(byRoundingPath: bottomRightCornerPath, color: borderColor!, width: borderWidth! * 2)
+                }
+                
+            }
+            
+        }
+        
+        
+    }
+    
+    /// 添加边框
+    private func setBorder(
+        byRoundingPath path: UIBezierPath, color: UIColor, width: CGFloat) -> Void {
+        
+        /// 边框Layer
+        let borderShapeLayer = CAShapeLayer.init()
+        borderShapeLayer.path = path.cgPath
+        
+        borderShapeLayer.strokeColor = color.cgColor
+        borderShapeLayer.fillColor = UIColor.clear.cgColor
+        borderShapeLayer.lineWidth = width
+        
+        self.layer.addSublayer(borderShapeLayer)
+        
+        if let _ = borderLayers {
+            borderLayers!.append(borderShapeLayer)
+            
+        }
+        
+    }
+    
+    
+}
+
 
 extension CALayer {
     
