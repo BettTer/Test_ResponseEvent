@@ -23,6 +23,8 @@
 		7F771F942466904A00B8ABD1 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F771F932466904A00B8ABD1 /* SecondViewController.swift */; };
 		9CB0B2A4259B114500FD6390 /* ListNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB0B2A3259B114500FD6390 /* ListNode.swift */; };
 		9CB0B2AC259C4E7500FD6390 /* AboutOptimization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB0B2AB259C4E7500FD6390 /* AboutOptimization.swift */; };
+		F536C84025CD4E9B001228D5 /* String + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F536C83F25CD4E9B001228D5 /* String + Extensions.swift */; };
+		F5F1607425CD4DD40005BDA3 /* UIView + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F1607325CD4DD40005BDA3 /* UIView + Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +49,8 @@
 		7F771F932466904A00B8ABD1 /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		9CB0B2A3259B114500FD6390 /* ListNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListNode.swift; sourceTree = "<group>"; };
 		9CB0B2AB259C4E7500FD6390 /* AboutOptimization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutOptimization.swift; sourceTree = "<group>"; };
+		F536C83F25CD4E9B001228D5 /* String + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String + Extensions.swift"; sourceTree = "<group>"; };
+		F5F1607325CD4DD40005BDA3 /* UIView + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +106,7 @@
 				7F21CD2824552BB7000DB8E5 /* AppDelegate.swift */,
 				7F771F8C24664DC400B8ABD1 /* Resources */,
 				7F771F872463A8E100B8ABD1 /* BasicTools */,
+				F5F1607225CD4DA80005BDA3 /* Extensions */,
 				7F771F90246652F100B8ABD1 /* TestFiles */,
 				7F21CD2C24552BB7000DB8E5 /* ViewController.swift */,
 				7F771F932466904A00B8ABD1 /* SecondViewController.swift */,
@@ -119,7 +124,6 @@
 			children = (
 				7F771F8A2463A94000B8ABD1 /* EnumSet.swift */,
 				7F771F882463A92800B8ABD1 /* ToolClass.swift */,
-				7F771F852463A8BC00B8ABD1 /* BaseExtensions.swift */,
 			);
 			path = BasicTools;
 			sourceTree = "<group>";
@@ -142,6 +146,16 @@
 				9CB0B2AB259C4E7500FD6390 /* AboutOptimization.swift */,
 			);
 			path = TestFiles;
+			sourceTree = "<group>";
+		};
+		F5F1607225CD4DA80005BDA3 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				7F771F852463A8BC00B8ABD1 /* BaseExtensions.swift */,
+				F5F1607325CD4DD40005BDA3 /* UIView + Extensions.swift */,
+				F536C83F25CD4E9B001228D5 /* String + Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -262,8 +276,10 @@
 			files = (
 				7F771F942466904A00B8ABD1 /* SecondViewController.swift in Sources */,
 				7F771F8424628F2200B8ABD1 /* TestView.swift in Sources */,
+				F5F1607425CD4DD40005BDA3 /* UIView + Extensions.swift in Sources */,
 				9CB0B2A4259B114500FD6390 /* ListNode.swift in Sources */,
 				49E8BFA7259B771B00ECFD0B /* TreeNode.swift in Sources */,
+				F536C84025CD4E9B001228D5 /* String + Extensions.swift in Sources */,
 				7F21CD2D24552BB7000DB8E5 /* ViewController.swift in Sources */,
 				7F771F922466538700B8ABD1 /* Delegates.swift in Sources */,
 				7F771F862463A8BC00B8ABD1 /* BaseExtensions.swift in Sources */,

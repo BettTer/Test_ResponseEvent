@@ -34,19 +34,19 @@ class ViewController: UIViewController {
         
 //        [.topLeft, .bottomRight]
         self.views[0].setCornerAndBorder(
-            byRoundingCorners: .allCorners,
+            targetSize: nil, byRoundingCorners: .allCorners,
             radii: 95 / 2,
             borderColor: .black,
             borderWidth: 10)
         
         self.views[1].setCornerAndBorder(
-            byRoundingCorners: nil,
+            targetSize: nil, byRoundingCorners: nil,
             radii: nil,
             borderColor: .black,
             borderWidth: 10)
         
         self.views[2].setCornerAndBorder(
-            byRoundingCorners: .allCorners,
+            targetSize: nil, byRoundingCorners: .allCorners,
             radii: 95 / 2,
             borderColor: nil,
             borderWidth: nil)
